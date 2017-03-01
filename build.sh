@@ -4,7 +4,7 @@
 # integrity check the summary file
 # ################################
 
-find recipes -name \*.md |sed -e "s;recipes/;;" | grep -vf SummaryBlacklist.txt | sort > /tmp/is_md.txt
+find recipes -name \*.md |grep -v node_modules |sed -e "s;recipes/;;" | grep -vf SummaryBlacklist.txt | sort > /tmp/is_md.txt
 
 cat recipes/SUMMARY.md |grep '(' | sed -e "s;.*(;;" -e "s;).*;;" |sort |grep -v '# Summary' > /tmp/is_summary.txt
 
