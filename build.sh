@@ -111,4 +111,7 @@ fi
 
 
 
-sed -i -e "s;VERSION_NUMBER;;" cookbook/styles/header.js
+#sed -i -e "s;VERSION_NUMBER;;" cookbook/styles/header.js
+
+# delete markdown files in output (gitbook 3.x bug)
+find cookbook/ -type f -name "*.md" -delete
