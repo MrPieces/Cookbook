@@ -2,9 +2,9 @@
   "gitbook": "^3.2.2",
   "title": "ArangoDB Cookbook",
   "author": "ArangoDB GmbH",
-  "description": "Recipes for ArangoDB - the multi-model NoSQL database",
+  "description": "Recipes for ArangoDB - the native multi-model NoSQL database",
   "language": "en",
-  "plugins":["-search", "-lunr", "-sharing", "toggle-chapters", "addcssjs", "anchorjs", "sitemap-general", "ga", "edit-link", "canonical-link"],
+  "plugins":["-search", "-lunr", "-sharing", "toggle-chapters", "addcssjs", "anchorjs", "sitemap-general", "ga", "edit-link", "canonical-link", "localized-footer"],
   "pdf": {
     "fontSize": 12,
     "toc": true,
@@ -35,6 +35,9 @@
     },
     "canonical-link": {
       "baseURL": "https://docs.arangodb.com/3.1/cookbook"
+    },
+    "localized-footer": {
+      "filename": "FOOTER.html"
     }
   }
 }
