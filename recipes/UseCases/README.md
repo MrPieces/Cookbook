@@ -9,4 +9,6 @@ Use Cases / Examples
 
 - [Exporting Data](ExportingData.md)
 
+- [Accessing base documents with Java](JavaDriverBaseDocument.md)
+
 - [Add XML data to ArangoDB with Java](JavaDriverXmlData.md)

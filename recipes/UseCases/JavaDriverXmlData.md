@@ -6,12 +6,12 @@ Problem
 
 You want to store XML data files into a database to have the ability to make queries onto them.
 
-**Note**: ArangoDB > 2.6 and the javaDriver => 2.7.2 is needed.
+**Note**: ArangoDB 3.1 and the corresponding Java driver is needed.
 
 Solution
 --------
 
-Since version 2.7.2 the aragodb-java-driver supports writing `createDocumentRaw(...)`, reading `getDocumentRaw(...)` and querying `executeAqlQueryRaw(...)` of raw strings containing the JSON documents.
+Since version 3.1.0 the aragodb-java-driver supports writing, reading and querying of raw strings containing the JSON documents.
 
 With [JsonML](http://www.jsonml.org/) you can convert a XML string into a JSON string and back to XML again.
 
@@ -139,14 +139,15 @@ The converted JSON string:
 
 Saving the converted JSON to ArangoDB example:
 ``` java
-DocumentEntity<String> entity = arangoDriver.createDocumentRaw(
-                "testCollection",
-                jsonObject.toString(), true,false);
-String documentHandle = entity.getDocumentHandle();
+ArangoDB.Builder arango = new ArangoDB.Builder().build();
+ArangoCollection collection = arango.db().collection("testCollection")
+DocumentCreateEntity<String> entity = collection.insertDocument(
+                jsonObject.toString());
+String key = entity.getKey();
 ```
 Reading the stored JSON as a string and convert it back to XML example:
 ``` java
-String rawJsonString = arangoDriver.getDocumentRaw(documentHandle, null, null);
+String rawJsonString = collection.getDocument(key, String.class);
 String xml = JSONML.toString(rawJsonString);
 System.out.println(xml);
 ```
@@ -170,28 +171,30 @@ Example output:
   </instructions>
 </recipe>
 ```
-**Note:** The [fields mandatory to ArangoDB documents](https://docs.arangodb.com/2.8/Documents/index.html) are added; If they break your XML schema you have to remove them.
+**Note:** The [fields mandatory to ArangoDB documents](https://docs.arangodb.com/current/Manual/DataModeling/Documents/DocumentAddress.html) are added; If they break your XML schema you have to remove them.
 
 Query raw data example:
 
 ``` java
-String queryString = "FOR t IN TestCollection FILTER t.cook_time == '3 hours' RETURN t";
-CursorRawResult cursor = arangoDriver.executeAqlQueryRaw(queryString, null, null);
-Iterator<String> iter = cursor.iterator();
-while (iter.hasNext()) {
-	JSONObject jsonObject = new JSONObject(iter.next());
+String queryString = "FOR t IN testCollection FILTER t.cook_time == '3 hours' RETURN t";
+ArangoCursor<String> cursor = arango.db().query(queryString, null, null, String.class);
+while (cursor.hasNext()) {
+	JSONObject jsonObject = new JSONObject(cursor.next());
 	String xml = JSONML.toString(jsonObject);
 	System.out.println("XML value: " + xml);
 }
 ```
 
-### Other resources
+Other resources
+---------------
 
-More documentation about the ArangoDB java driver is available:
- - [Arango DB Java in ten minutes](https://www.arangodb.com/tutorials/tutorial-java/)
- - [java driver at Github](https://github.com/arangodb/arangodb-java-driver)
- - [Raw JSON string example](https://github.com/arangodb/arangodb-java-driver/blob/master/src/test/java/com/arangodb/example/document/RawDocumentExample.java)
+More documentation about the ArangoDB Java driver is available:
 
-**Author**: [Achim Brandt](https://github.com/a-brandt)
+- [Tutorial: Java in ten minutes](https://www.arangodb.com/tutorials/tutorial-sync-java-driver/)
+- [Java driver at Github](https://github.com/arangodb/arangodb-java-driver)
+- [Example source code](https://github.com/arangodb/arangodb-java-driver/tree/master/src/test/java/com/arangodb/example)
+- [JavaDoc](http://arangodb.github.io/arangodb-java-driver/javadoc-4_1/index.html)
+
+**Author**: [Achim Brandt](https://github.com/a-brandt), [Mark Vollmary](https://github.com/mpv1989)
 
 **Tags**: #java #driver
