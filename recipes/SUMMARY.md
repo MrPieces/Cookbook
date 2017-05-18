@@ -28,6 +28,7 @@
   * [Importing Data](Administration/ImportingData.md)
   * [Replicating Data](Administration/ReplicatingData.md)
   * [XCopy Install Windows](Administration/XCopyInstallWindows.md)
+  * [Silent NSIS on Windows](Administration/NSISSilentMode.md)
   * [Migrating 2.8 to 3.0](Administration/Migrate2.8to3.0.md)
   * [Show grants function](Administration/ShowUsersGrants.md)
 * [Compiling / Build](Compiling/README.md)
