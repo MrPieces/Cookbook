@@ -73,6 +73,7 @@ fi
 gitbook install
 gitbook build . ./../cookbook
 
+rm -f ./../cookbook/FOOTER.html
 
 # integrity check the html for flat markdown links
 # ################################################
