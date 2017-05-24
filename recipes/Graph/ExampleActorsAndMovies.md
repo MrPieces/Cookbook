@@ -15,7 +15,7 @@ Problem
 (Copy from Stackoverflow)
 Given a collection of **actors** and a collection of **movies**. And a **actIn** edges collection (with a **year** property) to connect the vertex.
 
-\[Actor\] <- act in -> \[Movie\]
+\[Actor\] ← act in → \[Movie\]
 
  How could I get:
 

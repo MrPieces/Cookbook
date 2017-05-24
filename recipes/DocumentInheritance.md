@@ -19,9 +19,9 @@ g._extendEdgeDefinitions(graph_module. _directedRelation("class_extends_super", 
 
 This makes sure when using the graph interface that the inheritance looks like:
 
-* sub -> class
-* class -> super
-* super -> sub
+* sub → class
+* class → super
+* super → sub
 
 To make sure everything works as expected you should use the built-in traversal in combination with Foxx. This allows you to add the inheritance security layer easily.
 To use traversals in foxx simply add the following line before defining routes:
