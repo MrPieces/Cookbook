@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 
 # integrity check the summary file
@@ -70,8 +70,8 @@ else
 EOF
 fi
 
-if test -n "$(NODE_MODULES_DIR)"; then
-    cp -a $(NODE_MODULES_DIR) .
+if test -n "${NODE_MODULES_DIR}"; then
+    cp -a ${NODE_MODULES_DIR} .
 else
     gitbook install -g
 fi
