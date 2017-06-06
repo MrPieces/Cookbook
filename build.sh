@@ -70,7 +70,12 @@ else
 EOF
 fi
 
-gitbook install
+if test -n "$(NODE_MODULES_DIR)"; then
+    cp -a $(NODE_MODULES_DIR) .
+else
+    gitbook install -g
+fi
+
 gitbook build . ./../cookbook
 
 rm -f ./../cookbook/HEADER.html
