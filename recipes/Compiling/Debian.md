@@ -43,7 +43,7 @@ aptitude -y full-upgrade
 reboot
 ```
 
-### Install Build dependencies
+### Install build dependencies
 
 *Mandatory*
 
@@ -81,8 +81,6 @@ any changes, you can speed up cloning substantially by using the *--single-branc
 Switch into the ArangoDB directory
 
     unix> cd arangodb
-    unix> git submodule update --recursive
-    unix> git submodule update --init --recursive
     unix> mkdir build
     unix> cd build
 
@@ -90,47 +88,56 @@ In order to generate the build environment please execute
 
     unix> cmake .. 
 
-to setup the makefiles. This will check the various system characteristics and
+to setup the Makefiles. This will check the various system characteristics and
 installed libraries. If you installed the compiler in a non standard location, you may need to specify it:
 
     cmake -DCMAKE_C_COMPILER=/opt/bin/gcc -DCMAKE_CXX_COMPILER=/opt/bin/g++ ..
 
 If you compile on MacOS, you should add the following options to the cmake command:
 
-    cmake .. -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl -DCMAKE_BUILD_TYPE=RelWithDebInfo  -DCMAKE_OSX_DEPLOYMENT_TARGET=10.11
+    cmake .. -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl -DCMAKE_OSX_DEPLOYMENT_TARGET=10.11
 
-If you also plan to make changes to the source code of ArangoDB, you should compile with the `Debug` target;
-The `Debug` target enables additional sanity checks etc. which would slow down production binaries.
+If you also plan to make changes to the source code of ArangoDB, you may want to compile with the 
+`Debug` build type:
+    
+    cmake .. -DCMAKE_BUILD_TYPE=Debug
+
+The `Debug` target enables additional sanity checks etc. which would slow down production 
+binaries. If no build type is specified, ArangoDB will be compiled with build type `RelWithDebInfo`,
+which is a compromise between good performance and medium debugging experience.
 
 Other options valuable for development:
 
-    -DARANGODB_ENABLE_MAINTAINER_MODE
+    -DUSE_MAINTAINER_MODE=On
 
-Needed, if you plan to make changes to AQL language (which is implemented using a lexer and parser
-files in `arangod/Aql/grammar.y` and `arangod/Aql/tokens.ll`) your system has to contain the tools FLEX and BISON.
+Needed if you plan to make changes to AQL language (which is implemented using a lexer and parser
+files in `arangod/Aql/grammar.y` and `arangod/Aql/tokens.ll`) or if you want to enable runtime
+assertions. To use the maintainer mode, your system has to contain the tools FLEX and BISON.
 
-    -DARANGODB_ENABLE_BACKTRACE
+    -DUSE_BACKTRACE=On
 
-(requires the maintainer mode) If you want to have c++ stacktraces attached to your exceptions.
-This can be usefull to more quick locate the place where an exception or an assertion was thrown.
+Use this option if you want to have C++ stacktraces attached to your exceptions. This can be useful 
+to more quickly locate the place where an exception or an assertion was thrown. Note that this
+option will slow down the produces binaries a bit and requires building with maintainer mode.
 
+    -DUSE_OPTIMIZE_FOR_ARCHITECTURE=On
 
-scripts. It allows to run ArangoDB from the compile directory directly, without the
-need for a *make install* command and specifying much configuration parameters. 
-When used, you can start ArangoDB using this command:
-
-    bin/arangod /tmp/database-dir
+This will optimize the binary for the target architecture, potentially enabling more compiler
+optimizations, but making the resulting binary less portable.
 
 ArangoDB will then automatically use the configuration from file *etc/relative/arangod.conf*.
 
-    -DUSE_FAILURE_TESTS
+    -DUSE_FAILURE_TESTS=On
 
 This option activates additional code in the server that intentionally makes the
-server crash or misbehave (e.g. by pretending the system ran out of
-memory). This option is useful for writing tests.
+server crash or misbehave (e.g. by pretending the system ran out of memory) when certain tests
+are run. This option is useful for writing tests.
 
-By default the libc allocator is chosen. If your system offers the jemalloc it will be
-prefered over tcmalloc and the system allocator. 
+    -DUSE_JEMALLOC=Off
+
+By default ArangoDB will be built with a bundled version of the JEMalloc allocator. This 
+however will not work when using runtime analyzers such as ASAN or Valgrind. In order to use
+these tools for instrumenting an ArangoDB binary, JEMalloc must be turned off during compilation.
 
 ### shared memory
 Gyp is used as makefile generator by V8. Gyp requires shared memory to be available,
@@ -140,25 +147,20 @@ which may not if you i.e. compile in a chroot. You can make it available like th
     devpts    /opt/chroots/ubuntu_precise_x64/dev/pts    devpts    gid=5,mode=620    0  0
 
 
-### Compile
+### Compilation
 
 Compile the programs (server, client, utilities) by executing
 
     make
 
-This will compile ArangoDB and create a binary of the server in
+in the build subdirectory. This will compile ArangoDB and create the binary executable
+in file `build/bin/arangod`.
 
-    ./bin/arangod
-
-### Test
-
-Create an empty directory
-
-    unix> mkdir /tmp/database-dir
+### Starting and testing
 
 Check the binary by starting it using the command line.
 
-    unix> ./bin/arangod -c etc/relative/arangod.conf --server.endpoint tcp://127.0.0.1:8529 /tmp/database-dir
+    unix> build/bin/arangod -c etc/relative/arangod.conf --server.endpoint tcp://127.0.0.1:8529 /tmp/database-dir
 
 This will start up the ArangoDB and listen for HTTP requests on port 8529 bound
 to IP address 127.0.0.1. You should see the startup messages similar to the
@@ -176,13 +178,9 @@ database directory you specified exists and can be written into.
 
 Use your favorite browser to access the URL
 
-    http://127.0.0.1:8529/_api/version
+    http://127.0.0.1:8529/
 
-This should produce a JSON object like
-
-    {"server" : "arango", "version" : "..."}
-
-as result.
+This should bring up ArangoDB's web interface.
 
 ### Re-building ArangoDB after an update
 
@@ -192,36 +190,29 @@ need to pull the changes from it and re-run `make`.
 Normally, this will be as simple as follows:
 
     unix> git pull
-    unix> make
+    unix> (cd build && make)
 
 From time to time there will be bigger structural changes in ArangoDB, which may
 render the old Makefiles invalid. Should this be the case and `make` complains
 about missing files etc., the following commands should fix it:
 
 
-    unix> rm -f CMakeCache.txt
-    unix> cmake .. 
-    unix> make
+    unix> rm -rf build/* 
+    unix> cd build && cmake .. <cmake options go here>
+    unix> (cd build && make)
 
-In order to reset everything and also recompile all 3rd party libraries, issue
-the following commands:
+Note that the above commands will run a full rebuild of ArangoDB and all
+of its third-party components. That will take a while to complete.
 
+### Installation
 
-    unix> git checkout -- .
-    unix> cd ..; rm -rf build; mkdir build; cd build
+In a local development environment it is not necessary to install ArangoDB
+somewhere, because it can be started from within the source directory as
+shown above.
 
-This will clean up ArangoDB and the 3rd party libraries, and rebuild everything.
+If there should be the need to install ArangoDB, execute the following command:
 
-Sometimes you can get away with the less intrusive commands.
-
-### Install
-
-Install everything by executing
-
-    make install
-
-You must be root to do this or at least have write permission to the
-corresponding directories.
+    (cd build && sudo make install)
 
 The server will by default be installed in
 
@@ -239,7 +230,7 @@ The ArangoShell will be installed in
 
     /usr/local/bin/arangosh
 
-You should add an arangodb user and group (as root), plus make shure it owns these directories:
+You should add an arangodb user and group (as root), plus make sure it owns these directories:
 
     useradd -g arangodb arangodb
     chown -R arangodb:arangodb /usr/local/var/lib/arangodb3-apps/
@@ -251,7 +242,7 @@ system, e. g. `/etc` and `/var/lib`.
 
 When upgrading from a previous version of ArangoDB, please make sure you inspect
 ArangoDB's log file after an upgrade. It may also be necessary to start ArangoDB
-with the *--database.upgrade* parameter once to perform required upgrade or
+with the *--database.auto-upgrade* parameter once to perform required upgrade or
 initialization tasks.
 
 **Author:** [Patrick Huber](https://github.com/stackmagic)
