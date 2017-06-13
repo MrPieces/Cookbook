@@ -18,16 +18,18 @@ The options are as all other NSIS options specified in the form of `/OPTIONNAME=
 
  - PASSWORD - Set the database password. Newer versions will also try to evaluate a PASSWORD environment variable
  
- - INSTDIR - Installation directory. A directory where you have access to. 
- - INSTALLTYPE - one of the three:
-    - Service - launch the arangodb service via the Windows Services
-    - AllUsers - copy it into the directory for all users
-    - SingleUser - copy it into the home of this user
+ - INSTDIR - Installation directory. A directory where you have access to.
+ - DATABASEDIR - Database directory. A directory where you have access to and the databases should be created.
+ - APPDIR - Foxx Services directory. A directory where you have access to.
+ - INSTALL_SCOPE_ALL:
+    - 1 - AllUsers +Service - launch the arangodb service via the Windows Services, install it for all users
+    - 0 - SingleUser - install it into the home of this user, don'launch a service. Eventually create a desktop Icon so the user can do this.
  - DESKTOPICON - [0/1] whether to create Icons on the desktop to reference arangosh and the webinterface
- - Specify one of the three:
-   - NOPATH - [0/1] don't alter the PATH environment at all
-   - ALLPATH - [0/1] add it to the path for all users
-   - CURPATH - [0/1] add it to the path of the currently logged in users
+ - ADD_TO_PATH
+   - 0 - don't alter the PATH environment at all
+   - 1:
+     - INSTALL_SCOPE_ALL = 1 add it to the path for all users
+     - INSTALL_SCOPE_ALL = 0 add it to the path of the currently logged in users
  - STORAGE_ENGINE - [auto/mmfiles/rocksdb] which storage engine to use (arangodb 3.2 onwards) 
 
 *For Uninstallation*:
