@@ -35,6 +35,7 @@
   * [Compile on Windows (3.x)](Compiling/Windows30.md)
   * [Compile on Windows (2.x)](Compiling/Windows.md)
   * [Compile on Windows (pre-2.4)](Compiling/WindowsLegacy.md)
+  * [OpenSSL](Compiling/OpenSSL.md)
   * [Running Custom Build](Compiling/RunningCustomBuild.md)
     * [Recompiling jemalloc](Compiling/jemalloc.md)
 * [Cloud, DCOS and Docker](Cloud/README.md)
