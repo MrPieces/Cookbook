@@ -18,7 +18,18 @@ Open an explorer, choose a place where you want ArangoDB to be and unzip the fil
 
 #### Alter configuration
 
-**Optional**: Edit `etc\arangodb\arangod.conf` if the default values don't suit your needs (e.g. the location of the database files, ports to bind and so on).
+**Optional**:
+
+Edit `etc\arangodb3\arangod.conf` if the default values don't suit your needs 
+like:
+
+- [the location of the database files](https://docs.arangodb.com/latest/Manual/Administration/Configuration/Wal.html)
+- [ports to bind](https://docs.arangodb.com/latest/Manual/Administration/Configuration/Endpoint.html)
+- [storage engine](https://docs.arangodb.com/latest/Manual/Administration/Configuration/GeneralArangod.html#storage-engine)
+
+and so on.
+
+
 
 #### Create Runtime directories
 
