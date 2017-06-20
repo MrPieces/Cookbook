@@ -25,7 +25,7 @@ The options are as all other NSIS options specified in the form of `/OPTIONNAME=
     - 1 - AllUsers +Service - launch the arangodb service via the Windows Services, install it for all users
     - 0 - SingleUser - install it into the home of this user, don'launch a service. Eventually create a desktop Icon so the user can do this.
  - DESKTOPICON - [0/1] whether to create Icons on the desktop to reference arangosh and the webinterface
- - ADD_TO_PATH
+ - PATH
    - 0 - don't alter the PATH environment at all
    - 1:
      - INSTALL_SCOPE_ALL = 1 add it to the path for all users
