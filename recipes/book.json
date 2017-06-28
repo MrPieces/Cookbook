@@ -4,7 +4,19 @@
   "author": "ArangoDB GmbH",
   "description": "Recipes for ArangoDB - the native multi-model NoSQL database",
   "language": "en",
-  "plugins":["-search", "-lunr", "-sharing", "toggle-chapters", "addcssjs", "anchorjs", "sitemap-general", "ga", "edit-link", "canonical-link", "localized-footer"],
+  "plugins": [
+    "-search",
+    "-lunr",
+    "-sharing",
+    "toggle-chapters",
+    "addcssjs",
+    "anchorjs",
+    "sitemap-general",
+    "ga",
+    "edit-link",
+    "canonical-link",
+    "localized-footer"
+  ],
   "pdf": {
     "fontSize": 12,
     "toc": true,
