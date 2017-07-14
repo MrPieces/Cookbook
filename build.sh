@@ -76,7 +76,7 @@ else
     gitbook install -g
 fi
 
-gitbook build . ./../cookbook
+gitbook ${GITBOOK_ARGS} build . ./../cookbook
 
 rm -f ./../cookbook/HEADER.html
 rm -f ./../cookbook/FOOTER.html
