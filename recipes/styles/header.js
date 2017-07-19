@@ -31,6 +31,7 @@ function appendHeader() {
     '  </div>\n' +
     '  <select class="arangodb-version-switcher">\n' +
     '    <option value="devel">devel</option>\n' +
+    '    <option value="3.2">v3.2</option>\n' +
     '    <option value="3.1">v3.1</option>\n' +
     '    <option value="3.0">v3.0</option>\n' +
     '    <option value="2.8">v2.8</option>\n' +
@@ -40,16 +41,16 @@ function appendHeader() {
     '  </div>\n' +
     '  <ul class="arangodb-navmenu">\n' +
     '    <li>\n' +
-    '      <a href="#" data-book="Manual">Manual</a>\n' +
+    '      <a href="#" data-book="">Manual</a>\n' +
     '    </li>\n' +
     '    <li>\n' +
-    '      <a href="#" data-book="AQL">AQL</a>\n' +
+    '      <a href="#" data-book="/Aql">AQL</a>\n' +
     '    </li>\n' +
     '    <li>\n' +
-    '      <a href="#" data-book="HTTP">HTTP</a>\n' +
+    '      <a href="#" data-book="/HttpApi">HTTP</a>\n' +
     '    </li>\n' +
     '    <li class="active-tab">\n' +
-    '      <a href="#" data-book="cookbook">Cookbook</a>\n' +
+    '      <a href="#" data-book="/cookbook">Cookbook</a>\n' +
     '    </li>\n' +
     '    <li class="downloadIcon" title="Download">\n' +
     '      <a href="https://www.arangodb.com/download-arangodb-docs" target="_blank">\n' +
@@ -107,8 +108,8 @@ function appendHeader() {
     e.preventDefault();
     var urlSplit = gitbook.state.root.split("/");
     urlSplit.pop(); // ""
-    urlSplit.pop(); // e.g. "Manual"
-    window.location.href = urlSplit.join("/") + "/" + e.target.getAttribute("data-book") + "/index.html";
+    urlSplit.pop(); // "cookbook"
+    window.location.href = urlSplit.join("/") + e.target.getAttribute("data-book") + "/index.html";
   });
 
   // set again using jQuery to accommodate non-standard browsers (*cough* IE *cough*)
@@ -122,14 +123,10 @@ function appendHeader() {
   
   $(".arangodb-version-switcher").on("change", function(e) {
     var urlSplit = gitbook.state.root.split("/");
-    if (urlSplit.length == 6) {
-      urlSplit.pop(); // ""
-      var currentBook = urlSplit.pop(); // e.g. "Manual"
-      var version = urlSplit.pop() // e.g. "3.0"
-      window.location.href = urlSplit.join("/") + "/" + e.target.value + "/" + currentBook + "/";
-    } else {
-      window.location.href = "https://docs.arangodb.com/" + e.target.value;
-    }
+    urlSplit.pop(); // ""
+    urlSplit.pop(); // "cookbook"
+    urlSplit.pop() // "2.8"
+    window.location.href = urlSplit.join("/") + "/" + e.target.value + "/cookbook/";
   });
 
 });
