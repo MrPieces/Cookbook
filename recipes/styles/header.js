@@ -93,7 +93,7 @@ function appendHeader() {
   //render header
   rerenderNavbar();
   function addGoogleSrc() {
-    var cx = '010085642145132923492:fkfvh91ier0';
+    var cx = '010085642145132923492:ol7d_ppmq48';
     var gcse = document.createElement('script');
     gcse.type = 'text/javascript';
     gcse.async = true;
@@ -108,9 +108,7 @@ function appendHeader() {
     e.preventDefault();
     var urlSplit = gitbook.state.root.split("/");
     urlSplit.pop(); // ""
-    if (urlSplit.slice(-1) == "cookbook" && gitbook.state.config.title.indexOf("v2.8") != -1) {
-      urlSplit.pop();
-    }
+    urlSplit.pop(); // e.g. "Manual"
     window.location.href = urlSplit.join("/") + "/" + e.target.getAttribute("data-book") + "/index.html";
   });
 
@@ -125,14 +123,21 @@ function appendHeader() {
   
   $(".arangodb-version-switcher").on("change", function(e) {
     var urlSplit = gitbook.state.root.split("/");
-    if (urlSplit.length == 6) {
-      urlSplit.pop(); // ""
-      var currentBook = urlSplit.pop(); // e.g. "Manual"
-      var version = urlSplit.pop() // e.g. "3.0"
-      window.location.href = urlSplit.join("/") + "/" + e.target.value + "/" + currentBook + "/";
+    urlSplit.pop(); // ""
+    var currentBook = urlSplit.pop(); // e.g. "Manual"
+    urlSplit.pop() // e.g. "3.0"
+    if (e.target.value == "2.8") {
+      var legacyMap = {
+        "Manual": "",
+        "AQL": "/Aql",
+        "HTTP": "/HttpApi",
+        "cookbook": "/cookbook"
+      };
+      currentBook = legacyMap[currentBook];
     } else {
-      window.location.href = "https://docs.arangodb.com/" + e.target.value;
+      currentBook = "/" + currentBook;
     }
+    window.location.href = urlSplit.join("/") + "/" + e.target.value + currentBook + "/index.html";
   });
 
 });
