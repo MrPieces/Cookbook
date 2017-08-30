@@ -130,7 +130,7 @@ curl --dump - http://your.domain.com/
 If that's still working, check if ArangoDB is still accessible from the outside:
 
 ```
-curl --dump - http://your.domain.com/_api/version
+curl --dump - http://your.domain.com:8529/_api/version
 ```
 
 This should **not** work. If curl hangs or aborts with an error, that's good news.
