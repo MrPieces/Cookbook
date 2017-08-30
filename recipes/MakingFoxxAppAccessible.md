@@ -84,6 +84,9 @@ ProxyPass /arangodb/ http://127.0.0.1:8529/
 ProxyPassReverse /arangodb/ http://127.0.0.1:8529/
 ProxyPass /_db/ http://127.0.0.1:8529/_db/
 ProxyPassReverse /_db/ http://127.0.0.1:8529/_db/
+ProxyPass /_api/ http://127.0.0.1:8529/_api/
+ProxyPassReverse /_api/ http://127.0.0.1:8529/_api/
+
 ```
 
 Restart Apache again.
@@ -107,6 +110,10 @@ Respectively the availability to the Managementconsole:
         location /_db {
            allow all;
            proxy_pass http://127.0.0.1:8529/_db;
+        }
+        location /_api {
+           allow all;
+           proxy_pass http://127.0.0.1:8529/_api;
         }
 
 ### Validate the accessibility
