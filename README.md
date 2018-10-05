@@ -1,5 +1,7 @@
 ![ArangoDB-Logo](https://docs.arangodb.com/assets/arangodb_logo_2016_inverted.png)
 
+**Note**: this repository has been archived, as the cookbook is now maintained as part of the official ArangoDB documentation and not separetely.
+
 In this cookbook you can find some recipes for specific problems regarding ArangoDB.
 
 The cookbook is always work in progress.
